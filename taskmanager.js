@@ -16,9 +16,9 @@ function saveTask(){
     const duration = $("#txtDuration").val();    
     const status = $("#selStatus").val();
     const color = $("#selColor").val();
-    // const budget = $("#txtBudget").val();  
+    const budget = $("#txtBudget").val();  
  
-    let task = new Task(title, isImportant, desc, dueDate, duration, status, color);
+    let task = new Task(title, isImportant, desc, dueDate, duration, status, color, budget);
     $.ajax({
         type: "POST",
         url: serverUrl + "/api/tasks/",

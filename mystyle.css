@@ -56,15 +56,15 @@ h1{
 }
 main{
     display: flex;
-    /* height: calc(100vh - 53px);
-    background-image: url('https://cdn.wallpapersafari.com/98/14/kup1Jj.jpg'); */
+    height: calc(100vh - 53px);
+    background-image: url('https://cdn.wallpapersafari.com/98/14/kup1Jj.jpg');
 }
 #list{
     background-color: rgb(141, 175, 200);
     color: black;
     min-height: 60px;
     flex: 7;
-    /* position: relative; */
+    position: relative;
 }
 
 #form{
@@ -73,8 +73,8 @@ main{
     min-height: 60px;
     flex: 5;
 }
-/* .btn btn-dark{
+.btn btn-dark{
     width: 100px;
     height: 100px;
     font-size: 40px;
-} */
+}
