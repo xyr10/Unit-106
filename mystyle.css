@@ -7,26 +7,27 @@ h1{
 }
 
 .not-important{
-    font-size: 36px;
-    font-weight: 200;
+    font-size: 30px;
     color: lightgrey;
     cursor: pointer;
 }
 .not-important:hover {
-    font-size: 36px;
-    font-weight: 200;
-    color: rgb(141, 175, 200);
+    font-size: 30px;
+    color: lightgrey;
     cursor: pointer;
 }
 .important{
-    font-size: 72px;
-    color: greenyellow;
+    font-size: 30px;
+    color: red;
     cursor: pointer;
 }
 .important:hover {
-    color: purple;
+    color: red;
 }
-/* .task {
+#pendingTasks{
+    padding: 10px 30px;
+}
+.task {
     padding: 5px 20px;
     display: flex;
     margin-bottom: 10px 0;
@@ -37,13 +38,22 @@ h1{
 .task .info {
     flex: 5;
 }
+.task .info h5{
+    margin: 5px 0px;
+}
+.task .info p{
+    margin: 0;
+}
 .task label {
     flex: 1;
 }
 .task .dates {
     flex: 1;
-} */
-
+}
+.form-control{
+    background-color: white;
+    width: 95%;
+}
 main{
     display: flex;
     /* height: calc(100vh - 53px);

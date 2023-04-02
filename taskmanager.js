@@ -1,4 +1,4 @@
-var isImportant = false;
+var isImportant = false; //this is the global variable
 const serverUrl = "http://fsdiapi.azurewebsites.net";
 
 function togglePanel(){
@@ -16,9 +16,9 @@ function saveTask(){
     const duration = $("#txtDuration").val();    
     const status = $("#selStatus").val();
     const color = $("#selColor").val();
-    const budget = $("#txtBudget").val();  
-
-    let task = new Task(title, isImportant, desc, dueDate, duration, status, color, budget);
+    // const budget = $("#txtBudget").val();  
+ 
+    let task = new Task(title, isImportant, desc, dueDate, duration, status, color);
     $.ajax({
         type: "POST",
         url: serverUrl + "/api/tasks/",
@@ -61,7 +61,7 @@ function displayTask(task) {
         </div>
         
         <label>${task.status}</label>
-        <label>${task.budget}</label>
+        // <label>${task.budget}</label>
 
         <div class="dates">
         <label>${formatDate(task.dueDate)}</label>
@@ -77,14 +77,13 @@ function toggleImportant(){
     const impClasses = "fa-solid fa-tag important";
 
     if(isImportant) {
-        $("#iImportant").removeClass(nonImpClasses).addClass(impClasses);
+        $("#iImportant").removeClass(impClasses).addClass(nonImpClasses);
         isImportant = false;
     }
     else {
-
     //hide the section/element;
-    $("#iImportant").removeClass(nonImpClasses).addClass(impClasses);
-    isImportant = true;
+        $("#iImportant").removeClass(nonImpClasses).addClass(impClasses);
+        isImportant = true;
     }
 }
 function taskForm(){
