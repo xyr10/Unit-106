@@ -17,25 +17,46 @@ function saveTask(){
     const status = $("#selStatus").val();
     const color = $("#selColor").val();
     const budget = $("#txtBudget").val();  
+
+    //validations
+    const isValid = true;
+
+    // if no title OR no description OR no duration OR no budget
+    if(!title || !desc || !duration || !budget) {
+        isValid = false;
+        //if the data is not valid, then
+        //show an error, and
+        $("#pnlError").show();
+        setTimeout(() => {
+            $("#pnlError").slideToggle('slow');
+        }, 6000);
+    //stop the execution / don't do anything else in this function
+    }
  
     let task = new Task(title, isImportant, desc, dueDate, duration, status, color, budget);
+   
+    //send the obj to server
     $.ajax({
         type: "POST",
         url: serverUrl + "/api/tasks/",
-        data: JSON.stringify(task),
-        contentType: "application/json",
-        success: function(res){
+        data: JSON.stringify(task), //encode our object into a string (xml and JSON but JSON the most popular)
+        contentType: "application/json", //specify your data here, or else it will try to read it as a document
+        success: function(res){ //this is where we listen to the server
             console.log("Saved worked", res);
+            displayTask(task);
+            clearForm();
+
+            $("#pnlSuccess").show();
+            setTimeout(() => {
+                $("#pnlSuccess").slideToggle('slow');
+            } ,6000); //this will receive two parameters, what should happen (using an anonymous inline function), and how long 6000ms
         },
         error: function(error){
             console.log("Save failed", error);
+            alert("unexpected error, task was not saved")
         }
     });
     
-    console.log(task);
-
-    displayTask(task);
-    clearForm();
 }
 
 function clearForm(){
@@ -53,23 +74,65 @@ function formatDate(date){
     return trueDate.toLocaleDateString() + " " + trueDate.toLocaleTimeString();
 }
 
+function getIcon(savedAsImportant) {
+    if(savedAsImportant) {
+        //HERE
+        return '<i class="fa-solid fa-tag important"></i>';
+    }
+    else{
+        return '<i class="fa-solid fa-tag not-important"></i>';
+    }
+
+}
+function formatBudget(budget) {
+    if(!budget) return "0.00"; //curly braces optional if on a single line
+
+    //parse budget to a number, and then fix it to 2 decimals
+    return parseFloat(budget).toFixed(2);
+}
+
 function displayTask(task) {
-    let syntax = `<div class="task" style="border:1px solid ${task.color};">
+    let syntax = `<div id="${task._id}" class="task" style="border:1px solid ${task.color};">
+        
+        ${getIcon(task.important)}
+
+    
         <div class="info">
         <h5>${task.title}</h5>
         <p>${task.description}</p>
         </div>
         
         <label>${task.status}</label>
-        // <label>${task.budget}</label>
+        <label>$${formatBudget(task.budget)}</label>
 
         <div class="dates">
         <label>${formatDate(task.dueDate)}</label>
-        <label>${task.duration}</label>
+        <label>Duration: ${task.duration} days</label>
         </div>
+
+        <i onclick="deleteTask('${task._id}')" class="fa-solid fa-trash-alt iDelete"></i>
     </div>`;
 
     $("#pendingTasks").append(syntax);
+
+}
+
+function deleteTask(id){
+    console.log("icon clicked", id);
+
+    $.ajax({
+        type: "DELETE",
+        url: serverUrl + `/api/tasks/${id}/`,
+        success: function(){
+            console.log("Task removed");
+            $("#" + id).remove(); // remove div from screen
+
+        },
+        error: function(error){
+            console.log("Error deleting", error);
+
+        }
+    });
 
 }
 function toggleImportant(){
@@ -85,6 +148,22 @@ function toggleImportant(){
         $("#iImportant").removeClass(nonImpClasses).addClass(impClasses);
         isImportant = true;
     }
+}
+
+function deleteAllTasks(){
+    console.log("delete all tasks clicked");
+    $.ajax({
+        type: "DELETE",
+        url: serverUrl + "/api/tasks/clear/Xyrone/",
+        success: function(response){
+            console.log("tasks cleared");
+            $("#pendingTasks").html('');
+        },
+        error: function(error){
+            console.log("Error clearing tasks", error);
+        }
+
+});
 }
 function taskForm(){
     //get the values from the inputs in the form
@@ -129,6 +208,7 @@ function init(){
     $("#btnShowPanel").click(togglePanel);
     $("#btnSave").click(saveTask);
     $("#iImportant").click(toggleImportant);
+    $("#btnDeleteAllTasks").click(deleteAllTasks);
 }
 
 window.onload = init;
@@ -146,3 +226,17 @@ window.onload = init;
  * - clear form after displaying
  * 
  */
+
+/* DELETE /api/tasks/clear/<name>/
+DELETE /api/tasks/clear/<name>/
+
+Create the button 
+Click on the button, call a function (deleteAllTasks)
+the fn send a DELETE request to /api/tasks/clear/<name>/
+
+on success clear the contents of the list
+$("#pendingTasks").html('');
+
+*/
+
+
