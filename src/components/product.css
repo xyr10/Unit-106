@@ -1,0 +1,19 @@
+.product {
+    display: inline-block;
+    border: 1px solid black;
+    width: 240px;
+    height: 320px;
+    margin: 5px 7px;
+    border-radius: 4px;
+}
+
+.product:hover {
+    border-color: yellow;
+}
+
+.product .prices {
+    display: flex;
+}
+.product .prices label{
+    flex: 1;
+}
